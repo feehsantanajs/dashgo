@@ -1,7 +1,19 @@
 import { Flex, Icon, Input } from "@chakra-ui/react";
+import { useRef } from "react";
 import { RiSearch2Line } from "react-icons/ri";
 
 export function SearchBar(){
+
+    // Controlled comonents
+    // const [search, setSearch] = useState('')
+
+    //Uncontrolled components
+    //>>Imperative x Declarative
+    const searchInputRef = useRef<HTMLInputElement>(null);
+
+    console.log(searchInputRef.current.value);
+
+
     return(
         <Flex  
                 as="label" 
@@ -23,10 +35,8 @@ export function SearchBar(){
                     px="4"
                     mr="4"
                     placeholder="Search in deshboard"
-                    _placeholder={{
-                        color:'gray.400'
-                    }}
-                
+                    _placeholder={{color:'gray.400'}}
+                    ref={searchInputRef}
                 />
                 
                 <Icon as={ RiSearch2Line } fontSize="20" />
