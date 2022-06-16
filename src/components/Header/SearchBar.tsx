@@ -11,7 +11,7 @@ export function SearchBar(){
     //>>Imperative x Declarative
     const searchInputRef = useRef<HTMLInputElement>(null);
 
-    console.log(searchInputRef.current.value);
+
 
 
     return(

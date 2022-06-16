@@ -73,7 +73,7 @@ export default function CreateUser(){
                             <Input 
                                 name="email" 
                                 type="email" 
-                                label="E-mail" 
+                              
                                 error={errors.email}
                                 {...register('email')}
                             />
