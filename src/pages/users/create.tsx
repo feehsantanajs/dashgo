@@ -1,21 +1,23 @@
 import { Box, Button, Divider, Flex, Heading, HStack, SimpleGrid, useBreakpointValue, VStack } from "@chakra-ui/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { Input } from "../../components/Form/Input";
 import { Header } from "../../components/Header";
 import { Sidebar } from "../../components/SideBar";
-
-
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { api } from "../../services/api";
+import { useMutation } from "react-query";
+import { queryClient } from "../../services/queryClient";
+
 
 
 interface FieldDatas {
-    name: string,
-    email: string,
-    password:string,
+    name: string;
+    email: string;
+    password:string;
     password_confirmation:string
-    
   }
   
 
@@ -30,7 +32,22 @@ interface FieldDatas {
   })
 
 export default function CreateUser(){
-    
+    const router = useRouter();
+
+    const createUser = useMutation(async (user: FieldDatas) =>{
+        const response = await api.post("users",{
+            user:{
+                ...user,
+                created_at:new Date(),
+            }
+        })
+        return response.data.user;
+    },{
+        onSuccess:() => {
+            queryClient.invalidateQueries('users')
+        } 
+    })
+   
     const { register, handleSubmit, formState  } = useForm({
         resolver: yupResolver(createUserFormSchema)
     });
@@ -39,16 +56,13 @@ export default function CreateUser(){
 
     const handleSignIn: SubmitHandler<FieldDatas> = async (values) => {
         await new Promise(resolve => setTimeout(resolve,2000))
-        console.log(values);
+        router.push('/users')
     }
-
-
     return(
         <Box>
             <Header />
             <Flex w="100%" my="6" maxWidth={1480} mx="auto" px={["4","6"]} >
                 <Sidebar />
-
                 <Box 
                     as="form" 
                     flex="1" 
@@ -73,7 +87,7 @@ export default function CreateUser(){
                             <Input 
                                 name="email" 
                                 type="email" 
-                              
+                                label="Email" 
                                 error={errors.email}
                                 {...register('email')}
                             />
